@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Wedding Invitation | Ritika & Ayush</title>
+  
+  <!-- Elegant Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --primary: #8b3a4a;
+      --primary-light: #fbeee9;
+      --accent: #d4af37;
+      --text: #332227;
+      --bg: #f9f5f6;
+      --card-bg: #ffffff;
+      --font-serif: 'Cormorant Garamond', serif;
+      --font-script: 'Alex Brush', cursive;
+      --font-sans: 'Montserrat', sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: #2b1b22;
+      font-family: var(--font-sans);
+      color: var(--text);
+      display: flex;
+      justify-content: center;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    .mobile-frame {
+      width: 100%;
+      max-width: 440px;
+      min-height: 100vh;
+      background-color: var(--bg);
+      position: relative;
+      overflow-y: auto;
+      box-shadow: 0 0 40px rgba(0, 0, 0, 0.5);
+    }
+
+    /* Floating Music Button */
+    .music-btn {
+      position: fixed;
+      top: 18px;
+      right: 18px;
+      z-index: 99;
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(8px);
+      border: 1px solid var(--accent);
+      border-radius: 50%;
+      width: 42px;
+      height: 42px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      transition: transform 0.2s;
+    }
+    .music-btn:active { transform: scale(0.92); }
+
+    /* ================= 1. ENVELOPE SCREEN ================= */
+    #envelope-screen {
+      position: fixed;
+      inset: 0;
+      max-width: 440px;
+      margin: 0 auto;
+      background: #e9d5ce;
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 0.8s ease, visibility 0.8s ease;
+    }
+
+    #envelope-screen.opened {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .envelope-box {
+      width: 320px;
+      height: 230px;
+      background: #d8b4a6;
+      border-radius: 8px;
+      position: relative;
+      box-shadow: 0 20px 35px rgba(0,0,0,0.2);
+      perspective: 800px;
+    }
+
+    .envelope-pattern {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(#c49b8c 1px, transparent 1px);
+      background-size: 16px 16px;
+      opacity: 0.4;
+    }
+
+    .envelope-flap {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 0;
+      height: 0;
+      border-left: 160px solid transparent;
+      border-right: 160px solid transparent;
+      border-top: 130px solid #c9a496;
+      transform-origin: top;
+      transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 3;
+    }
+
+    .envelope-box.open-flap .envelope-flap {
+      transform: rotateX(180deg);
+    }
+
+    .wax-seal {
+      position: absolute;
+      top: 105px;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 80px;
+      height: 80px;
+      background: radial-gradient(circle, #e6ca65 0%, #b8860b 80%, #7b5900 100%);
+      border-radius: 50%;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.3), inset 0 2px 4px rgba(255,255,255,0.6);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: #3b2800;
+      cursor: pointer;
+      z-index: 4;
+      animation: pulse 2s infinite ease-in-out;
+      border: 3px solid #f6e27a;
+    }
+
+    .wax-seal span {
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: translate(-50%, -50%) scale(1); }
+      50% { transform: translate(-50%, -50%) scale(1.06); }
+    }
+
+    /* ================= 2. MAIN INVITATION CONTENT ================= */
+    .invite-container {
+      padding: 30px 20px 80px;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+
+    .hero-card {
+      background: var(--card-bg);
+      border-radius: 24px;
+      padding: 36px 20px;
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(139, 58, 74, 0.08);
+      border: 1px solid rgba(212, 175, 55, 0.3);
+      position: relative;
+    }
+
+    .ganesh-heading {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--primary);
+      margin-bottom: 6px;
+      letter-spacing: 1px;
+    }
+
+    .blessings-text {
+      font-family: var(--font-serif);
+      font-size: 14px;
+      color: #7d6b70;
+      margin-bottom: 16px;
+      line-height: 1.4;
+    }
+
+    .sub-title {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: #7d6b70;
+      margin-bottom: 8px;
+    }
+
+    .names {
+      font-family: var(--font-script);
+      font-size: 48px;
+      color: var(--primary);
+      line-height: 1.1;
+      margin: 4px 0;
+    }
+
+    .parent-info {
+      font-size: 12.5px;
+      color: #685359;
+      font-weight: 500;
+      margin-bottom: 6px;
+    }
+
+    .ampersand {
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-size: 26px;
+      color: var(--accent);
+      display: block;
+      margin: 2px 0;
+    }
+
+    .details-text {
+      font-family: var(--font-serif);
+      font-size: 16px;
+      line-height: 1.5;
+      color: #4f3b42;
+      margin-top: 16px;
+    }
+
+    /* Scratch-to-Reveal Card */
+    .scratch-wrapper {
+      background: var(--card-bg);
+      border-radius: 20px;
+      padding: 26px 20px;
+      text-align: center;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.05);
+    }
+
+    .scratch-container {
+      position: relative;
+      width: 260px;
+      height: 160px;
+      margin: 18px auto 0;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: inset 0 2px 6px rgba(0,0,0,0.1);
+    }
+
+    .scratch-under {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: var(--primary-light);
+      color: var(--primary);
+      user-select: none;
+    }
+
+    .scratch-under h4 {
+      font-family: var(--font-serif);
+      font-size: 22px;
+      margin-bottom: 4px;
+    }
+
+    .scratch-under p {
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 1px;
+    }
+
+    #scratch-canvas {
+      position: absolute;
+      inset: 0;
+      cursor: crosshair;
+      touch-action: none;
+    }
+
+    /* Countdown Timer */
+    .countdown-section {
+      text-align: center;
+    }
+
+    .countdown-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .timer-box {
+      background: #ffffff;
+      padding: 14px 6px;
+      border-radius: 14px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.04);
+      border: 1px solid #ebd9df;
+    }
+
+    .timer-num {
+      font-size: 24px;
+      font-weight: 600;
+      color: var(--primary);
+      font-family: var(--font-serif);
+    }
+
+    .timer-label {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #8c787e;
+      margin-top: 4px;
+    }
+
+    /* Timeline & Events */
+    .section-title {
+      font-family: var(--font-serif);
+      font-size: 26px;
+      color: var(--primary);
+      text-align: center;
+      margin-bottom: 18px;
+    }
+
+    .timeline-date-label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      margin: 16px 0 8px 4px;
+    }
+
+    .timeline-item {
+      background: #fff;
+      padding: 14px 18px;
+      border-radius: 14px;
+      margin-bottom: 10px;
+      border-left: 4px solid var(--accent);
+      box-shadow: 0 3px 12px rgba(0,0,0,0.03);
+    }
+
+    .timeline-time {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--primary);
+      text-transform: uppercase;
+    }
+
+    .timeline-title {
+      font-family: var(--font-serif);
+      font-size: 19px;
+      margin: 3px 0;
+    }
+
+    .btn-maps {
+      display: block;
+      width: 100%;
+      text-align: center;
+      background: var(--primary);
+      color: #fff;
+      text-decoration: none;
+      padding: 12px;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 500;
+      margin-top: 14px;
+      transition: opacity 0.2s;
+    }
+    .btn-maps:active { opacity: 0.85; }
+
+    /* RSVP Card */
+    .rsvp-card {
+      background: #fff;
+      padding: 24px 20px;
+      border-radius: 20px;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.05);
+      text-align: center;
+    }
+
+    .phone-link {
+      display: inline-block;
+      color: var(--primary);
+      font-weight: 600;
+      text-decoration: none;
+      margin: 4px 8px;
+      font-size: 15px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Audio Element -->
+  <audio id="bg-music" src="music.mp3" preload="auto" loop></audio>
+
+  <!-- Floating Audio Toggle -->
+  <button class="music-btn" id="musicToggle" aria-label="Toggle Audio">
+    🎵
+  </button>
+
+  <div class="mobile-frame">
+
+    <!-- 1. ENVELOPE OPENING SCREEN -->
+    <section id="envelope-screen">
+      <div class="envelope-box" id="envelopeBox">
+        <div class="envelope-pattern"></div>
+        <div class="envelope-flap"></div>
+        <div class="wax-seal" id="openSeal">
+          <span>Tap To</span>
+          <span style="font-size: 14px;">Open</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. SCROLLABLE INVITATION CONTENT -->
+    <main class="invite-container">
+
+      <!-- Hero Section -->
+      <section class="hero-card">
+        <div class="ganesh-heading">॥ श्री गणेशाय नमः ॥</div>
+        <p class="blessings-text">
+          With the blessings of<br>
+          <strong>Smt. Sarla Devi & Late Sh. Angat Ram Sharma</strong><br>
+          request your gracious presence on the wedding ceremony of
+        </p>
+
+        <h1 class="names">Ritika</h1>
+        <div class="parent-info">(D/o Smt. Pinki Devi & Sh. Chaman Lal)</div>
+
+        <span class="ampersand">with</span>
+
+        <h1 class="names">Ayush</h1>
+        <div class="parent-info">(S/o Smt. Sunita Sharma & Late Sh. Mukesh Sharma)</div>
+
+        <div class="details-text">
+          Cordially invite you to join the celebration of their wedding commitment.
+        </div>
+      </section>
+
+      <!-- Scratch to Reveal Date -->
+      <section class="scratch-wrapper">
+        <h3 class="section-title">Scratch To Reveal Date</h3>
+        <div class="scratch-container">
+          <div class="scratch-under">
+            <h4>January 27, 2027</h4>
+            <p>WEDNESDAY • 08:00 PM</p>
+          </div>
+          <canvas id="scratch-canvas" width="260" height="160"></canvas>
+        </div>
+      </section>
+
+      <!-- Live Countdown -->
+      <section class="countdown-section">
+        <h3 class="section-title">Counting Down To Forever</h3>
+        <div class="countdown-grid">
+          <div class="timer-box">
+            <div class="timer-num" id="days">00</div>
+            <div class="timer-label">Days</div>
+          </div>
+          <div class="timer-box">
+            <div class="timer-num" id="hours">00</div>
+            <div class="timer-label">Hours</div>
+          </div>
+          <div class="timer-box">
+            <div class="timer-num" id="minutes">00</div>
+            <div class="timer-label">Mins</div>
+          </div>
+          <div class="timer-box">
+            <div class="timer-num" id="seconds">00</div>
+            <div class="timer-label">Secs</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Golden Moments / Program Timeline -->
+      <section>
+        <h3 class="section-title">Golden Moments</h3>
+
+        <div class="timeline-date-label">Tuesday, 26th January 2027</div>
+        <div class="timeline-item">
+          <div class="timeline-time">03:00 PM</div>
+          <div class="timeline-title">Haldi Ceremony</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-time">05:00 PM</div>
+          <div class="timeline-title">Mehendi</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-time">08:00 PM</div>
+          <div class="timeline-title">Dinner</div>
+        </div>
+        <p style="font-size: 12px; color: #7d6b70; margin: 4px 0 14px 6px;">
+          📍 <em>Pre-wedding Venue: Hotel Royal Galaxy, Sector-10, Dwarka</em>
+        </p>
+
+        <div class="timeline-date-label">Wednesday, 27th January 2027</div>
+        <div class="timeline-item">
+          <div class="timeline-time">08:00 AM</div>
+          <div class="timeline-title">Ganesh Puja</div>
+        </div>
+        <div class="timeline-item" style="border-left-color: var(--primary);">
+          <div class="timeline-time">08:00 PM</div>
+          <div class="timeline-title">Wedding Ceremony</div>
+        </div>
+      </section>
+
+      <!-- Wedding Venue Section with Google Maps -->
+      <section style="background: #fff; padding: 24px; border-radius: 20px; text-align: center; box-shadow: 0 8px 25px rgba(0,0,0,0.05);">
+        <h3 class="section-title" style="margin-bottom: 8px;">Wedding Venue</h3>
+        <p style="font-size: 18px; font-weight: 600; color: var(--primary); font-family: var(--font-serif);">Surya Palace</p>
+        <p style="font-size: 13.5px; color: #6a575c; margin: 6px 0 14px; line-height: 1.5;">
+          Sector-23, Dwarka,<br>
+          Near Radha Swami Satsang Bhawan,<br>
+          New Delhi - 110077
+        </p>
+        <a href="https://www.google.com/maps/search/?api=1&query=Surya+Palace+Sector+23+Dwarka+Near+Radha+Swami+Satsang+Bhawan+New+Delhi" target="_blank" class="btn-maps">
+          📍 Open Location in Google Maps
+        </a>
+      </section>
+
+      <!-- RSVP & Contact Section -->
+      <section class="rsvp-card">
+        <h3 class="section-title" style="margin-bottom: 8px;">R.S.V.P.</h3>
+        <p style="font-size: 16px; font-weight: 600; font-family: var(--font-serif); color: var(--primary);">All Sharma Family</p>
+        <div style="margin: 12px 0;">
+          <a href="tel:+919958171619" class="phone-link">📞 9958171619</a>
+          <a href="tel:+919319375760" class="phone-link">📞 9319375760</a>
+        </div>
+        <p style="font-size: 12px; color: #7d6b70; margin-top: 10px;">
+          With Best Compliments From All Relatives & Friends
+        </p>
+      </section>
+
+    </main>
+  </div>
+
+  <script>
+    // --- 1. Envelope & Audio Trigger ---
+    const openSeal = document.getElementById('openSeal');
+    const envelopeBox = document.getElementById('envelopeBox');
+    const envelopeScreen = document.getElementById('envelope-screen');
+    const audio = document.getElementById('bg-music');
+    const musicToggle = document.getElementById('musicToggle');
+    let isPlaying = false;
+
+    openSeal.addEventListener('click', () => {
+      audio.play().then(() => {
+        isPlaying = true;
+      }).catch(err => console.log('Audio autoplay blocked', err));
+
+      envelopeBox.classList.add('open-flap');
+      setTimeout(() => {
+        envelopeScreen.classList.add('opened');
+      }, 700);
+    });
+
+    musicToggle.addEventListener('click', () => {
+      if (isPlaying) {
+        audio.pause();
+        musicToggle.innerText = '🔇';
+      } else {
+        audio.play();
+        musicToggle.innerText = '🎵';
+      }
+      isPlaying = !isPlaying;
+    });
+
+    // --- 2. Scratch-to-Reveal Logic ---
+    const canvas = document.getElementById('scratch-canvas');
+    const ctx = canvas.getContext('2d');
+
+    const grad = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+    grad.addColorStop(0, '#dfb7af');
+    grad.addColorStop(0.5, '#f4d5cc');
+    grad.addColorStop(1, '#b57973');
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    ctx.fillStyle = '#6e4540';
+    ctx.font = 'bold 13px Montserrat';
+    ctx.textAlign = 'center';
+    ctx.fillText('✨ SCRATCH TO REVEAL ✨', canvas.width / 2, canvas.height / 2 + 5);
+
+    let isScratching = false;
+
+    function scratch(e) {
+      if (!isScratching) return;
+      const rect = canvas.getBoundingClientRect();
+      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+      const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+      const x = clientX - rect.left;
+      const y = clientY - rect.top;
+
+      ctx.globalCompositeOperation = 'destination-out';
+      ctx.beginPath();
+      ctx.arc(x, y, 18, 0, Math.PI * 2, false);
+      ctx.fill();
+    }
+
+    ['mousedown', 'touchstart'].forEach(evt => canvas.addEventListener(evt, (e) => { isScratching = true; scratch(e); }));
+    ['mousemove', 'touchmove'].forEach(evt => canvas.addEventListener(evt, scratch));
+    ['mouseup', 'touchend', 'touchcancel'].forEach(evt => canvas.addEventListener(evt, () => { isScratching = false; }));
+
+    // --- 3. Live Countdown (Set to 27th Jan 2027, 8:00 PM IST) ---
+    const targetDate = new Date('2027-01-27T20:00:00').getTime();
+
+    function updateCountdown() {
+      const now = new Date().getTime();
+      const diff = targetDate - now;
+
+      if (diff <= 0) {
+        document.getElementById('days').innerText = "00";
+        document.getElementById('hours').innerText = "00";
+        document.getElementById('minutes').innerText = "00";
+        document.getElementById('seconds').innerText = "00";
+        return;
+      }
+
+      const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+      const s = Math.floor((diff % (1000 * 60)) / 1000);
+
+      document.getElementById('days').innerText = String(d).padStart(2, '0');
+      document.getElementById('hours').innerText = String(h).padStart(2, '0');
+      document.getElementById('minutes').innerText = String(m).padStart(2, '0');
+      document.getElementById('seconds').innerText = String(s).padStart(2, '0');
+    }
+    setInterval(updateCountdown, 1000);
+    updateCountdown();
+  </script>
+</body>
+</html>
